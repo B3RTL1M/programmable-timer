@@ -4,8 +4,6 @@
 LCD12864 LCDA;
 
 int cont = 0;
-bool enc_A_stat;
-bool enc_B_stat;
 
 void setup() {
   
@@ -15,10 +13,9 @@ void setup() {
   pinMode(BUT_ENC, INPUT);
   pinMode(ENC_A, INPUT);
   pinMode(ENC_B, INPUT);
-  enc_A_stat = digitalRead(ENC_A);
-  enc_B_stat = digitalRead(ENC_B);
-  attachInterrupt(ENC_A, enc_A_int, FALLING);
-  attachInterrupt(ENC_A, enc_B_int, RISING);
+  
+  attachInterrupt(ENC_A, enc_A_int, CHANGE);
+  attachInterrupt(ENC_A, enc_B_int, CHANGE);
 }
 
 void loop() {
@@ -33,10 +30,14 @@ void loop() {
 }
 
 void enc_A_int() {
-  cont++;
+  if(digitalRead(ENC_A)!=digitalRead(ENC_B)) {
+    cont++;
+  }
 }
 
 void enc_B_int() {
-  cont--;
+  if(digitalRead(ENC_A)!=digitalRead(ENC_B)) {
+    cont--;
+  }
 }
 
